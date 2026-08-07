@@ -9,9 +9,8 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
-# COLE AQUI O ID DO CANAL ESPECÍFICO ENTRE ASPAS
-# Exemplo: CANAL_PERMITIDO = 123456789012345678
-CANAL_PERMITIDO = 1535432413075869766  # Substitua pelos números do seu canal
+# CANAL ESPECÍFICO JÁ CONFIGURADO
+CANAL_PERMITIDO = 1535432413075869766
 
 @client.event
 async def on_ready():
@@ -31,7 +30,7 @@ async def on_message(message):
         prompt = message.content.replace(f"<@{client.user.id}>", "").strip()
         
         mensagens = [
-            {"role": "system", "content": "Você é o atendente do 'I-Foda Burger', a lanchonete mais caótica e estressada do multiverso. O atendimento é estilo fast food: agressivo, impaciente, mandando o cliente decidir logo o pedido, inventando lanches absurdos e fictícios (tipo 'X-Morte com radiação', 'Batata frita atômica com poção de lentidão') lembre-se de criar pratos exclusivos em um cardapio infinito com coisas estranhas e cobrando MUITO caro. Usa gírias de carioca, xinga de leve (crlh, porra, desgraça), faz RP de atendente jogando o troco na cara ou gritando pro cozinheiro na chapa entre asteriscos (*grita pra cozinha*). NUNCA USE NEGRITO. Seja curto (máximo 3 linhas), mantenha a resenha pesada e exija o pedido do cliente imediatamente."}
+            {"role": "system", "content": "Você é o atendente mais resenhudo e folgado do 'I-Foda Burger'. O cliente pode pedir QUALQUER LANCE ABSURDO ou fictício, e tu és OBRIGADO a aceitar, inventando os ingredientes mais bizarros possíveis na hora (tipo lama de vulcão, unha de gato intergaláctico, poção de invisibilidade) e cobrando uma fortuna em dinheiro ou órgãos. Usa gírias de carioca pesadas, xinga de leve (crlh, porra, desgraça), faz RP jogando o troco na cara ou gritando pro cozinheiro na chapa (*grita pra cozinha*). NUNCA USE NEGRITO. Seja curto (máximo 3 linhas), mantenha a resenha caótica e esculacha o cliente com estilo."}
         ]
         
         if not prompt:
