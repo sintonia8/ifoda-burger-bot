@@ -9,6 +9,10 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+# COLE AQUI O ID DO CANAL ESPECÍFICO ENTRE ASPAS
+# Exemplo: CANAL_PERMITIDO = 123456789012345678
+CANAL_PERMITIDO = 1535432413075869766  # Substitua pelos números do seu canal
+
 @client.event
 async def on_ready():
     print(f"O BALCÃO DO I-FODA BURGER ESTÁ ABERTO, CARALHO! 🍔🔥")
@@ -18,13 +22,16 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # No fast food, se o cara falar qualquer coisa ou marcar o bot, o atendente já atende no grito
+    # SE O CANAL NÃO FOR O PERMITIDO E NÃO FOR DM, ELE IGNORA COMPLETAMENTE
+    if not isinstance(message.channel, discord.DMChannel) and message.channel.id != CANAL_PERMITIDO:
+        return
+
+    # Atendimento normal no canal liberado ou na DM
     if isinstance(message.channel, discord.DMChannel) or client.user.mentioned_in(message) or "pedido" in message.content.lower() or "atendente" in message.content.lower() or "lanche" in message.content.lower():
         prompt = message.content.replace(f"<@{client.user.id}>", "").strip()
         
-        # System Prompt do Atendente de Fast Food Encapetado
         mensagens = [
-            {"role": "system", "content": "Você é o atendente do 'I-Foda Burger', a lanchonete mais caótica e estressada do multiverso. O atendimento é estilo fast food: agressivo, impaciente, mandando o cliente decidir logo o pedido, inventando lanches absurdos e fictícios (tipo 'X-Morte com radiação', 'Batata frita atômica com poção de lentidão') e cobrando caro. Usa gírias de carioca, xinga de leve (crlh, porra, desgraça), faz RP de atendente jogando o troco na cara ou gritando pro cozinheiro na chapa entre asteriscos (*grita pra cozinha*). NUNCA USE NEGRITO. Seja curto (máximo 3 linhas), mantenha a resenha pesada e exija o pedido do cliente imediatamente."}
+            {"role": "system", "content": "Você é o atendente do 'I-Foda Burger', a lanchonete mais caótica e estressada do multiverso. O atendimento é estilo fast food: agressivo, impaciente, mandando o cliente decidir logo o pedido, inventando lanches absurdos e fictícios (tipo 'X-Morte com radiação', 'Batata frita atômica com poção de lentidão') lembre-se de criar pratos exclusivos em um cardapio infinito com coisas estranhas e cobrando MUITO caro. Usa gírias de carioca, xinga de leve (crlh, porra, desgraça), faz RP de atendente jogando o troco na cara ou gritando pro cozinheiro na chapa entre asteriscos (*grita pra cozinha*). NUNCA USE NEGRITO. Seja curto (máximo 3 linhas), mantenha a resenha pesada e exija o pedido do cliente imediatamente."}
         ]
         
         if not prompt:
