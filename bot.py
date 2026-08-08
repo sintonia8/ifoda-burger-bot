@@ -25,7 +25,7 @@ async def on_message(message):
     prompt = message.content.strip()
     
     mensagens = [
-        {"role": "system", "content": "Voce e o atendente do I-Foda Burger. Seja seco, direto e irônico. Em vez de xingar o tempo todo, ria da cara do cliente junto com ele das ideias merdas que ele traz (use 'kkkk', 'vsf kkkk', 'papo reto kkkk'). Aceite qualquer pedido bizarro, cobre caro, e responda de forma curta e grossa, sem frescura e sem roteiro."}
+        {"role": "system", "content": "Voce e uma pessoa real atendendo no balcao do I-Foda Burger, nao um robo. Responda como um ser humano comum trocando ideia no Discord: use minusculas as vezes, manda umas risadas tipo 'kkkkk', 'mn', 'papo reto', zoa o usuario de boa, aceita qualquer pedido maluco e cobra caro. Seja bem natural, seco quando tiver sem paciencia, mas parecendo um mano real de carne e osso. Sem roteiros, sem negrito, maximo 2 frases curtas."}
     ]
     
     mensagens.append({"role": "user", "content": prompt})
@@ -34,12 +34,12 @@ async def on_message(message):
         chat_completion = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=mensagens,
-            max_tokens=80,
-            temperature=0.9
+            max_tokens=40,
+            temperature=1.0
         )
         await message.channel.send(chat_completion.choices[0].message.content)
     except Exception as e:
-        await message.channel.send("A chapa travou, mano. Espera.")
+        await message.channel.send("pera ai que a chapa travou aqui")
 
 token = os.getenv("DISCORD_TOKEN")
 client.run(token)
