@@ -8,7 +8,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
-CANAL_PERMITIDO = 153543241307586976
+CANAL_PERMITIDO = 1535432413075869766
 
 # Dicionário pra guardar a conversa de cada usuário (Memória!)
 historico_conversas = {}
