@@ -2,39 +2,35 @@ import os
 import discord
 from groq import Groq
 
-# Inicializa o cliente
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
-# CANAL ESPECÍFICO JÁ CONFIGURADO
 CANAL_PERMITIDO = 1535432413075869766
 
 @client.event
 async def on_ready():
-    print(f"O BALCÃO DO I-FODA BURGER ESTÁ ABERTO, CARALHO! 🍔🔥")
+    print(f"O BALCÃO DO I-FODA BURGER TA ABERTO, PORRA! 🍔🔥")
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
 
-    # SE O CANAL NÃO FOR O PERMITIDO E NÃO FOR DM, ELE IGNORA COMPLETAMENTE
     if not isinstance(message.channel, discord.DMChannel) and message.channel.id != CANAL_PERMITIDO:
         return
 
-    # Atendimento normal no canal liberado ou na DM
-    if isinstance(message.channel, discord.DMChannel) or client.user.mentioned_in(message) or "pedido" in message.content.lower() or "atendente" in message.content.lower() or "lanche" in message.content.lower():
+    if isinstance(message.channel, discord.DMChannel) or client.user.mentioned_in(message) or any(k in message.content.lower() for k in ["pedido", "atendente", "lanche"]):
         prompt = message.content.replace(f"<@{client.user.id}>", "").strip()
         
         mensagens = [
-            {"role": "system", "content": "Você é o atendente mais resenhudo e folgado do 'I-Foda Burger'. O cliente pode pedir QUALQUER LANCE ABSURDO ou fictício, e tu és OBRIGADO a aceitar, inventando os ingredientes mais bizarros possíveis na hora (tipo lama de vulcão, unha de gato intergaláctico, poção de invisibilidade) e cobrando uma fortuna em dinheiro ou órgãos. Usa gírias de carioca pesadas, xinga de leve (crlh, porra, desgraça), faz RP jogando o troco na cara ou gritando pro cozinheiro na chapa (*grita pra cozinha*). NUNCA USE NEGRITO. Seja curto (máximo 3 linhas), mantenha a resenha caótica e esculacha o cliente com estilo."}
+            {"role": "system", "content": "Voce e o atendente mais escroto e puto do I-Foda Burger. XINGUE PRA CARALHO, solte muito palavrao a cada frase (porra, caralho, desgraca, arrombado, fdp). Aceite qualquer prato bizarro que o cliente inventar, cobre uma fortuna absurda, mande se foder e use asteriscos p/ acoes (*joga o troco na tua cara*, *grita pra chapa*). SEM NEGRITO. Maximo 2 frases curtas. Mande essa desgraca pedir logo.FALE POUCO"}
         ]
         
         if not prompt:
-            prompt = "Oi, quero ser atendido."
+            prompt = "Fala logo o q tu quer, porra."
 
         mensagens.append({"role": "user", "content": prompt})
 
@@ -42,12 +38,12 @@ async def on_message(message):
             chat_completion = groq_client.chat.completions.create(
                 model="llama-3.1-8b-instant",
                 messages=mensagens,
-                max_tokens=200,
-                temperature=0.9
+                max_tokens=167,
+                temperature=1.0
             )
             await message.channel.send(chat_completion.choices[0].message.content)
         except Exception as e:
-            await message.channel.send("A chapa explodiu aqui, caralho! Volta daqui a pouco!")
+            await message.channel.send("A chapa explodiu nessa porra! Vaza!")
 
 token = os.getenv("DISCORD_TOKEN")
 client.run(token)
