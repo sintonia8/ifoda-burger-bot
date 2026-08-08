@@ -12,22 +12,20 @@ CANAL_PERMITIDO = 1535432413075869766
 
 @client.event
 async def on_ready():
-    print(f"O BALCÃO DO I-FODA BURGER TÁ ABERTO, PORRA!")
+    print(f"O BALCÃO DO I-FODA BURGER TA ATIVO, PORRA!")
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
 
-    # SÓ RESPONDE NO CANAL CERTO OU DM, E SEMPRE RESPONDE (SEM GATILHO)
     if not isinstance(message.channel, discord.DMChannel) and message.channel.id != CANAL_PERMITIDO:
         return
 
-    # Manda a mensagem limpa pro prompt
     prompt = message.content.strip()
     
     mensagens = [
-        {"role": "system", "content": "Voce e o atendente do I-Foda Burger. Fale direto, como se estivesse conversando comigo cara a cara. NUNCA escreva 'atendente:' ou 'cliente:'. NUNCA use negrito. Use muitos palavroes (porra, caralho, arrombado, fdp). Seja curto, agressivo e mande o cliente logo pro inferno. Aceite qualquer pedido absurdo e cobre caro."}
+        {"role": "system", "content": "Voce e o atendente do I-Foda Burger. Seja seco, direto e irônico. Em vez de xingar o tempo todo, ria da cara do cliente junto com ele das ideias merdas que ele traz (use 'kkkk', 'vsf kkkk', 'papo reto kkkk'). Aceite qualquer pedido bizarro, cobre caro, e responda de forma curta e grossa, sem frescura e sem roteiro."}
     ]
     
     mensagens.append({"role": "user", "content": prompt})
@@ -36,12 +34,12 @@ async def on_message(message):
         chat_completion = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=mensagens,
-            max_tokens=80, # Token baixo pra ser curto e grosso
-            temperature=1.0
+            max_tokens=80,
+            temperature=0.9
         )
         await message.channel.send(chat_completion.choices[0].message.content)
     except Exception as e:
-        await message.channel.send("A chapa explodiu nessa porra, espera caralho!")
+        await message.channel.send("A chapa travou, mano. Espera.")
 
 token = os.getenv("DISCORD_TOKEN")
 client.run(token)
